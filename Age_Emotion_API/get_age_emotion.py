@@ -34,14 +34,14 @@ emo_params = {}
 
 # In[11]:
 
-#argv = sys.argv
-#if len(argv) == 1:
-#    print("Usage: # python {} [filename]".format(argv[0]))
-#    quit()
+argv = sys.argv
+if len(argv) == 1:
+    print("Usage: # python {} [filename]".format(argv[0]))
+    quit()
     
-#image_url = argv[1]
+image_url = argv[1]
 
-image_url = "http://img.horipro.co.jp/wp-content/uploads/sites/17/2014/09/4efa1206c3ddde742caafee8af2a531e.jpg"
+#image_url = "http://img.horipro.co.jp/wp-content/uploads/sites/17/2014/09/4efa1206c3ddde742caafee8af2a531e.jpg"
 payload = {
     "url": image_url
 }
@@ -49,21 +49,29 @@ payload = {
 face = requests.post(face_url, headers=face_headers, params=face_params, data=json.dumps(payload))
 emo = requests.post(emo_url, headers=emo_headers, params=emo_params, data=json.dumps(payload))
 
-print(face.text)
-print(emo.text)
+#print(face.text)
+#print(emo.text)
 
 
-# In[21]:
+# In[24]:
 
 face_dict = json.loads(face.text)[0]
 emo_dict = json.loads(emo.text)[0]["scores"]
 
 age = face_dict["faceAttributes"]["age"]
-temp = max(emo_dict.items(), key=lambda x:x[1])
-emotion = [temp[0], int(temp[1] * 100)]
+emotion = max(emo_dict.items(), key=lambda x:x[1])
 
-print("I estimate that your age is {}, ".format(age))
-print("and your emotion is [{0[0]}] with a {0[1]}% chance".format(emotion))
+to_json = [
+    {"age": age},
+    {emotion[0]: emotion[1]}
+]
+
+age_emotion_json = json.dumps(to_json)
+
+print("I can send this json file: \n", age_emotion_json)
+
+#print("I estimate that your age is {}, ".format(age))
+#print("and your emotion is [{0[0]}] with a {0[1]}% chance".format(emotion))
 
 
 # In[ ]:
