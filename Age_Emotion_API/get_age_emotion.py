@@ -53,14 +53,14 @@ print(face.text)
 print(emo.text)
 
 
-# In[19]:
+# In[21]:
 
 face_dict = json.loads(face.text)[0]
 emo_dict = json.loads(emo.text)[0]["scores"]
 
 age = face_dict["faceAttributes"]["age"]
-emotion = max(emo_dict.items(), key=lambda x:x[1])
-emotion[1] = 
+temp = max(emo_dict.items(), key=lambda x:x[1])
+emotion = [temp[0], int(temp[1] * 100)]
 
 print("I estimate that your age is {}, ".format(age))
 print("and your emotion is [{0[0]}] with a {0[1]}% chance".format(emotion))
